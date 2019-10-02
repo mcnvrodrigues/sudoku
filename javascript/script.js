@@ -1,3 +1,26 @@
+class game{
+    constructor(){
+        this.keySelected = 0;
+        this.digitSelected = 0;
+    }
+
+    setKeySelected(key){
+        this.keySelected = key;
+    }
+
+    setDigitSelected(digit){
+        this.digitSelected = digit;
+    }
+
+    getKeySelected(){
+        return this.keySelected;
+    }
+    
+    getDigitSelected(){
+        return this.digitSelected;
+    }
+}
+
 class block{
     constructor(digits){
         this.digits = digits;
@@ -14,8 +37,10 @@ class block{
 
 class grid{
     constructor(blocks){
-        this.blocks = blocks;
+        this.blocks = blocks;        
     }
+
+    
 
     get(){
         return this.blocks;
@@ -112,31 +137,88 @@ let gr = [[blck_a, blck_b, blck_c],
           [blck_d, blck_e, blck_f],
           [blck_g, blck_h, blck_i]];
 
+let match = new game();
+
 let sudoku = new grid(gr);
 
+function digitClicked(e){
+    console.log('Digit clicked: ', e.currentTarget);
+    e.currentTarget.style.backgroundColor = "red";
+    match.setDigitSelected(e.currentTarget);
+}
+
+function keyClicked(e){
+    //debugger;
+    console.log('Key clicked: ', e.currentTarget.innerHTML);
+    match.setKeySelected(e.currentTarget);
+    if(match.getDigitSelected()){
+        console.log(match.getDigitSelected());
+        match.getDigitSelected().style.backgroundColor = "white";
+    }else{
+        console.log('Digito nao selecionado');
+    }
+    //match.getDigitSelected.style.backgroundColor = "white";
+    linkKeyDigit();
+}
+
+function linkKeyDigit(){
+    if(match.getDigitSelected() !== 0){
+        if(match.getKeySelected() !== 0){
+            let key = match.getKeySelected().innerHTML;
+            let digit = match.getDigitSelected();
+            digit.innerHTML = `<div class="num">${key}</div>`;
+        }
+    }
+}
 
 document.addEventListener("DOMContentLoaded", function(event) { 
     let html = '';
     let digit = undefined;
 
-    for(let bl = 0; bl < 9; bl += 1){
+    for(let bl = 0; bl < 9; bl += 1){    
+
         html += `<div class="block">`;
+
         for(let row = 0; row < 3; row += 1){
+
             for (let column = 0; column < 3; column += 1){
+
                 digit = sudoku.getBlockByIndex(bl).getDigits()[row][column];
-                html += `<div class="digit"><div class="num">${digit}</div></div>`;
+                
+                let showNum = Math.floor(Math.random() * 10);                
+
+                if (showNum < 3){                    
+                    html += `<div class="digit" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"><div class="num">${digit}</div></div>`;
+                }else{
+                    html += `<div class="digit" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"><div class="num"></div></div>`;
+                }
+                
             }
         }
         html += `</div>`;
     }
   
-    // Add all the divs to the HTML
+    
     let mainGrid = document.querySelector('#main_grid');
   
     if(mainGrid){
         mainGrid.innerHTML = html;
     }
-  
+
+    // Bind the click event of each element to a function
+  document.querySelectorAll('.digit').forEach( digit => {
+    // digit.onclick = function() {      
+    //   console.log('Digit clicked: ', digit);
+    // };
+    digit.onclick = digitClicked;
+  });
+
+  document.querySelectorAll('.key-num').forEach(num => {
+    // num.onclick = function(){
+    //     console.log('Num-key clicked:', num);
+    // };
+    num.onclick = keyClicked;
+  });  
     
   });
   

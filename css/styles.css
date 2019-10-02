@@ -1,27 +1,26 @@
 #main_grid {
     background:#dddddd;
-    width:500px;
-    height:500px;
-    padding:20px;
-    margin:0px auto;    
-    box-shadow: inset 0px 0px 20px -6px rgba(97,89,97,1);
+    width:474px;
+    height:474px;
+    padding:8px;
+    margin:50px auto 10px auto;        
   }
 
 .digit {
-    background-color: #c6d3dd;
+    background-color: #ffffff;
     width:44px;
     height:44px;
     float:left;
-    margin:1px;
+    margin:0px;
     padding:3px;
     font-size:40px;
-    border: 1px solid black;
+    border: 1px solid rgba(68, 66, 66, 0.473);
   }
 
   .block {
-    background-color: #79b48d;
-    width:162px;
-    height:162px;
+    /* background-color: #79b48d; */
+    width:156px;
+    height:156px;
     float:left;
     margin:0px;
     padding:0px;    
@@ -45,4 +44,71 @@
     border-width: 1px 1px 1px 2px;
     border-style: solid;
     border-left-color: red;
+  }
+
+  .keyboard{   
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width:474px;
+    height:50px;
+    padding:8px;
+    margin:5px auto;
+    /* border: 1px solid black; */
+  }
+
+  .key-num{
+    background-color: #ffffff;
+    width:38px;
+    height:38px;    
+    margin:3px;
+    padding:3px 10px;
+    font-size:35px;
+    border: 2px solid rgba(153, 53, 53, 0.473);
+  }
+
+  @media (max-width: 600px) {
+    #main_grid {
+      background:#dddddd;
+      width:285px;
+      height:285px;
+      width: device-width;
+      height: device-width;
+      padding:0px;
+      margin:50px auto;    
+      box-shadow: inset 0px 0px 20px -6px rgba(97,89,97,1);
+    }
+  
+  .digit {
+      background-color: #ffffff;
+      width:25px;
+      height:25px;
+      /* width: (device-width/9) - 6px;
+      height: (device-width/9) - 6px; */
+      float:left;
+      margin:0px;
+      padding:2px;
+      font-size:20px;
+      border: 1px solid rgb(153, 134, 134);
+    }
+  
+    .block {
+      /* background-color: #79b48d; */
+      width:93px;
+      height:93px;
+      /* width: device-width/3 - 2px;
+      height: device-width/3 - 2px; */
+      float:left;
+      margin:0px;
+      padding:0px;    
+      border: 1px solid black;
+    }
+  
+    .num{
+      font-size:auto;
+      float: center;
+      margin:0px;
+      padding:2px 7px; 
+    }
+  
   }
