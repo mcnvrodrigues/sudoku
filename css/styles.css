@@ -14,10 +14,23 @@
     margin:0px;
     padding:3px;
     font-size:40px;
+    color: rgba(26, 30, 231, 0.815);
     border: 1px solid rgba(68, 66, 66, 0.473);
   }
 
-  .block {
+  .digit-non-clickable {
+    background-color: #bec1d3ec;
+    width:44px;
+    height:44px;
+    float:left;
+    margin:0px;
+    padding:3px;
+    font-size:40px;
+    color: rgba(40, 39, 41, 0.884);
+    border: 1px solid rgba(68, 66, 66, 0.473);
+  }
+
+.block {
     /* background-color: #79b48d; */
     width:156px;
     height:156px;
@@ -27,7 +40,15 @@
     border: 1px solid black;
   }
 
-  .num{
+.num-alert{
+    font-size:auto;
+    float: center;
+    color:red;
+    margin:0px;
+    padding:2px 10px; 
+  }
+
+.num{
     font-size:auto;
     float: center;
     margin:0px;
@@ -80,6 +101,19 @@
     }
   
   .digit {
+      background-color: #ffffff;
+      width:25px;
+      height:25px;
+      /* width: (device-width/9) - 6px;
+      height: (device-width/9) - 6px; */
+      float:left;
+      margin:0px;
+      padding:2px;
+      font-size:20px;
+      border: 1px solid rgb(153, 134, 134);
+    }
+
+    .digit-non-clickable {
       background-color: #ffffff;
       width:25px;
       height:25px;
