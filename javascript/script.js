@@ -242,12 +242,10 @@ let solution = new Grid(gr);
 let userSolution = new Grid(gr_user);
 
 
-function digitClicked(e){
-    //console.log('Digit clicked: ', e.currentTarget);
+function digitClicked(e){    
     if(match.getPreviousTarget()){
         match.getPreviousTarget().style.backgroundColor = "white";
-    }
-    
+    }    
     
     match.setPreviousTarget(e.currentTarget);
     match.setDigitSelected(e.currentTarget);
@@ -255,22 +253,19 @@ function digitClicked(e){
 }
 
 function keyClicked(e){
-    //debugger;
-    //console.log('Key clicked: ', e.currentTarget.innerHTML);
+    //debugger;    
     match.setKeySelected(e.currentTarget);
 
     if(match.getDigitSelected()){
-        //console.log(match.getDigitSelected());
+        
         match.getDigitSelected().style.backgroundColor = "white";
         linkKeyDigit();
-    }
-    //match.getDigitSelected.style.backgroundColor = "white";
+    }  
     
 }
 
-function checkIfNumberIsValid(number){
-   
-    //let key = parseInt(match.getKeySelected().innerText);//numero selecionado pelo usuário
+function checkIfNumberIsValid(number){   
+    
     let digit = match.getDigitSelected(); //posição do grid selecionada
 
     let blockIndex = parseInt(digit.getAttribute('data-block-index')); //recupera block selecionado pelo usuário
@@ -281,10 +276,6 @@ function checkIfNumberIsValid(number){
     let numbersArrayRow = userSolution.getNumbersRow(blockIndex, rowIndex);
     let numbersArrayColumn = userSolution.getNumbersColumn(blockIndex, columnIndex);
 
-    // console.log(numbersArrayBlock + ' - ' + numbersArrayBlock.indexOf(number));
-    // console.log(numbersArrayRow + ' - ' + numbersArrayRow.indexOf(number));
-    // console.log(numbersArrayColumn + ' - ' + numbersArrayColumn.indexOf(number));
-
     if((numbersArrayBlock.indexOf(number) === -1) && (numbersArrayRow.indexOf(number) === -1) && (numbersArrayColumn.indexOf(number) === -1)){
         return true;
     }else{
@@ -293,73 +284,93 @@ function checkIfNumberIsValid(number){
 
 }
 
-function markInvalidNumbers(number){
-    let digit = match.getDigitSelected(); //posição do grid selecionada
+function checkIfNumberIsValidB(number, element){ 
+    
+    let digit = element; //posição do grid selecionada    
 
     let blockIndex = parseInt(digit.getAttribute('data-block-index')); //recupera block selecionado pelo usuário
     let rowIndex = digit.getAttribute('data-row'); // recupera linha selecionada pelo usuário
-    let columnIndex = digit.getAttribute('data-column'); // recupera coluna selecionada pelo usuário
+    let columnIndex = digit.getAttribute('data-column'); // recupera coluna selecionada pelo usuário   
+    
 
-    // let numbersArrayBlock = userSolution.getBlockByIndexToArray(blockIndex);
-    // let numbersArrayRow = userSolution.getNumbersRow(blockIndex, rowIndex);
-    // let numbersArrayColumn = userSolution.getNumbersColumn(blockIndex, columnIndex);
+    let numbersArrayBlock = userSolution.getBlockByIndexToArray(blockIndex);    
+    let numbersArrayRow = userSolution.getNumbersRow(blockIndex, rowIndex);
+    let numbersArrayColumn = userSolution.getNumbersColumn(blockIndex, columnIndex);
 
-    let elements = document.querySelectorAll('.digit-non-clickable');
-    console.log(elements);
+    let indexArrayBlock = [];
+    let indexArrayRow = [];
+    let indexArrayColumn = [];    
+
+    let idxBlock = numbersArrayBlock.indexOf(number);
+    while(idxBlock !== -1){
+        indexArrayBlock.push(idxBlock);
+        idxBlock = numbersArrayBlock.indexOf(number, idxBlock + 1);
+    }
+
+    let idxRow = numbersArrayRow.indexOf(number);
+    while(idxRow !== -1){
+        indexArrayRow.push(idxRow);
+        idxRow = numbersArrayRow.indexOf(number, idxRow + 1);
+    }
+
+    let idxColumn = numbersArrayColumn.indexOf(number);
+    while(idxColumn !== -1){
+        indexArrayColumn.push(idxColumn);
+        idxColumn = numbersArrayColumn.indexOf(number, idxColumn + 1);
+    }    
+
+    if((indexArrayBlock.length == 1) && (indexArrayRow.length == 1) && (indexArrayColumn.length == 1)){        
+        return true;
+    }else{        
+        return false;
+    }       
+
+}
+
+function markInvalidNumbers(){ 
+
+    let elements = document.querySelectorAll('.bl');
+    //console.log(elements);
 
     elements.forEach(function(element){
         let blIndex = parseInt(element.getAttribute('data-block-index'));
         let rIndex = element.getAttribute('data-row');
         let cIndex = element.getAttribute('data-column');
-        if(blIndex === blockIndex || rIndex === rowIndex || cIndex === columnIndex){
-            element.style.color = "red";
-        }
-    });
-    // if(numbersArrayBlock.indexOf(number) !== -1){
-    //     for(let i = 0; i < numbersArrayBlock.length; i++){
-    //         element = document.createElement('div');
-    //         element.setAttribute("class","digit-non-clickable");
-    //         element.setAttribute("data-block-index",`${blockIndex}`);
-    //         element.setAttribute("data-row",`${rowIndex}`);
-    //         element.setAttribute("data-column",`${columnIndex}`);
-    //         element.innerHTML = `<div class="num">${number}</div>`;
-    //         //element.innerHTML = `<div class="digit-non-clickable" data-block-index = "${blockIndex}" data-row = "${rowIndex}" data-column = "${columnIndex}"><div class="num">${number}</div></div>`;
-    //         element.style.backgroundColor = "purple";
-    //     }
-    // }
 
+        let userNumber = userSolution.getBlockByIndex(blIndex).getDigits()[rIndex][cIndex];
+        //console.log(userNumber);
+
+        if(userNumber !== 0){
+            if(checkIfNumberIsValidB(userNumber, element)){
+                element.innerHTML = `<div class="num">${userNumber}</div>`;
+            }else{
+                element.innerHTML = `<div class="num-alert">${userNumber}</div>`;                
+            }
+        }
+
+    });
+  
 }
 
 // Verifica se uma posição foi selecionada no grid e, se um numero do teclado foi selecionado
 function linkKeyDigit(){
     if(match.getDigitSelected() !== 0){
         if(match.getKeySelected() !== 0){
-            let key = parseInt(match.getKeySelected().innerText);
-            let digit = match.getDigitSelected();
+            let key = parseInt(match.getKeySelected().innerText); //recupera numero do teclado
+            let digit = match.getDigitSelected(); //recupera elemento selecionado            
 
             let block = parseInt(digit.getAttribute('data-block-index')); //recupera block selecionado pelo usuário
             let row = digit.getAttribute('data-row'); // recupera linha selecionada pelo usuário
             let column = digit.getAttribute('data-column'); // recupera coluna selecionada pelo usuário            
 
-            //console.log(`Block ${block}, row ${row} column ${column} key ${key}`);
-
-            //console.log("row ", userSolution.getNumbersRow(block,row));
-            //console.log("column ", userSolution.getNumbersColumn(block,column));
-            //console.log("Block ", userSolution.getBlockByIndex(block));
-            //console.log("Block ", userSolution.getBlockByIndexToArray(block));
-
-            //console.log(document.querySelectorAll('.digit')[0]);            
-
-            if(checkIfNumberIsValid(key)){
-                digit.innerHTML = `<div class="num">${key}</div>`;
-            }else{
-                digit.innerHTML = `<div class="num-alert">${key}</div>`;
-                //markInvalidNumbers(key);
-            }
-            
+            let userNumber = userSolution.getBlockByIndex(block).getDigits()[row][column];              
 
             userSolution.getBlockByIndex(block).set(row, column, key);// atribui valor selecionado pelo usuário no grid
-            
+            if(userNumber !== key){
+                markInvalidNumbers();
+            }else{
+                //console.log('já existe');
+            }
         }
     }
 }
@@ -376,17 +387,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             for (let column = 0; column < 3; column += 1){
 
-                digit = solution.getBlockByIndex(bl).getDigits()[row][column];      
-                //console.log(userSolution.getBlockByIndex(bl).getDigits().set(row, column, digit));         
+                digit = solution.getBlockByIndex(bl).getDigits()[row][column];                            
                 
                 let showNum = Math.floor(Math.random() * 10);                
 
                 if (showNum < 3){        
                     userSolution.getBlockByIndex(bl).set(row, column, digit);
         
-                    html += `<div class="digit-non-clickable" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"><div class="num">${digit}</div></div>`;
+                    html += `<div class="digit-non-clickable bl" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"><div class="num">${digit}</div></div>`;
                 }else{
-                    html += `<div class="digit" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"></div>`;
+                    html += `<div class="digit bl" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"></div>`;
                 }
                 
             }
@@ -403,16 +413,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // Bind the click event of each element to a function
   document.querySelectorAll('.digit').forEach( digit => {
-    // digit.onclick = function() {      
-    //   console.log('Digit clicked: ', digit);
-    // };
     digit.onclick = digitClicked;
   });
 
   document.querySelectorAll('.key-num').forEach(num => {
-    // num.onclick = function(){
-    //     console.log('Num-key clicked:', num);
-    // };
     num.onclick = keyClicked;
   });  
     
