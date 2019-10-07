@@ -2,7 +2,8 @@ class Game{
     constructor(){
         this.keySelected = 0;
         this.digitSelected = 0;
-        this.previousTarget = '';
+        this.previousTarget = '';   
+        this.numErrors = 0;     
     }
 
     setKeySelected(key){
@@ -28,6 +29,30 @@ class Game{
     getPreviousTarget(){
         return this.previousTarget;
     }
+
+    checkFinalResult(solutionNumbers, userNumbers){
+        let solutionNumber = 0;
+        let userNumber = 0;
+        for(let block = 0; block < 9; block += 1){
+            for(let row = 0; row < 3; row += 1){
+                for(let column = 0; column < 3; column += 1){
+                    solutionNumber = solutionNumbers.getBlockByIndex(block).getDigits()[row][column];
+                    userNumber = userNumbers.getBlockByIndex(block).getDigits()[row][column];
+                    if(solutionNumber !== userNumber) return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    setNumErrors(){
+        this.numErrors += 1;
+    }
+
+    getNumErrors(){
+        return this.numErrors;
+    }
     
 }
 
@@ -47,7 +72,7 @@ class Block{
 
 class Grid{
     constructor(blocks){
-        this.blocks = blocks;        
+        this.blocks = blocks;            
     }    
 
     getBlocks(){
@@ -128,6 +153,21 @@ class Grid{
 
         return column;
     }    
+
+    getTotalNumbers(){
+        let totalNumbers = 0;
+        this.getBlocks().forEach(block => {
+            block.getDigits().forEach(column => {
+                column.forEach(row => {
+                    if(row !== 0){
+                        totalNumbers += 1;
+                    }
+                });
+            });
+        });
+
+        return totalNumbers;
+    }
 }
 
 let bl_a = [[2, 3, 4], 
@@ -274,11 +314,11 @@ function checkIfNumberIsValid(number){
 
     let numbersArrayBlock = userSolution.getBlockByIndexToArray(blockIndex);
     let numbersArrayRow = userSolution.getNumbersRow(blockIndex, rowIndex);
-    let numbersArrayColumn = userSolution.getNumbersColumn(blockIndex, columnIndex);
+    let numbersArrayColumn = userSolution.getNumbersColumn(blockIndex, columnIndex);    
 
-    if((numbersArrayBlock.indexOf(number) === -1) && (numbersArrayRow.indexOf(number) === -1) && (numbersArrayColumn.indexOf(number) === -1)){
+    if((numbersArrayBlock.indexOf(number) === -1) && (numbersArrayRow.indexOf(number) === -1) && (numbersArrayColumn.indexOf(number) === -1)){        
         return true;
-    }else{
+    }else{        
         return false;
     }       
 
@@ -344,7 +384,11 @@ function markInvalidNumbers(){
             if(checkIfNumberIsValidB(userNumber, element)){
                 element.innerHTML = `<div class="num">${userNumber}</div>`;
             }else{
-                element.innerHTML = `<div class="num-alert">${userNumber}</div>`;                
+                element.innerHTML = `<div class="num-alert">${userNumber}</div>`; 
+                // match.setNumErrors();
+                
+                // let errorLabel = document.getElementById("num-error");
+                // errorLabel.innerText = `${match.getNumErrors()}/3`;
             }
         }
 
@@ -354,6 +398,7 @@ function markInvalidNumbers(){
 
 // Verifica se uma posição foi selecionada no grid e, se um numero do teclado foi selecionado
 function linkKeyDigit(){
+    
     if(match.getDigitSelected() !== 0){
         if(match.getKeySelected() !== 0){
             let key = parseInt(match.getKeySelected().innerText); //recupera numero do teclado
@@ -365,15 +410,55 @@ function linkKeyDigit(){
 
             let userNumber = userSolution.getBlockByIndex(block).getDigits()[row][column];              
 
-            userSolution.getBlockByIndex(block).set(row, column, key);// atribui valor selecionado pelo usuário no grid
+            // userSolution.getBlockByIndex(block).set(row, column, key);// atribui valor selecionado pelo usuário no grid
             if(userNumber !== key){
+                
+                if(!checkIfNumberIsValid(key)){
+                    match.setNumErrors();
+                
+                    let errorLabel = document.getElementById("num-error");
+                    errorLabel.innerText = `${match.getNumErrors()}/3`;
+                }
+                userSolution.getBlockByIndex(block).set(row, column, key);// atribui valor selecionado pelo usuário no grid
                 markInvalidNumbers();
+                if(userSolution.getTotalNumbers() === 81){
+                    if(match.checkFinalResult(solution, userSolution)){
+                        console.log('You win!');
+                    }
+                }
+                console.log(userSolution.getTotalNumbers());
             }else{
                 //console.log('já existe');
             }
         }
     }
 }
+
+function time() {
+    
+    let s = 1;
+    let s_r = '';
+    let m = 0;
+    let m_r = '';
+    
+    
+	const interval = setInterval(function() {
+		if (s == 60) { m++; s = 0; }
+		if (m == 60) { s = 0; m = 0; }
+		
+        if(m < 10) m_r = "0" + m; else m_r = '' + m;	
+        if(s < 10) s_r = "0" + s; else s_r = '' + s;
+        document.getElementById("time").innerText = `${m_r}:${s_r}`;
+        
+		s++;
+	},1000);
+}
+
+
+function winGame(){
+    let grid = document.querySelectorAll('.bl');
+}
+
 
 document.addEventListener("DOMContentLoaded", function(event) { 
     let html = '';
@@ -419,6 +504,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   document.querySelectorAll('.key-num').forEach(num => {
     num.onclick = keyClicked;
   });  
+
+  time();
     
   });
   

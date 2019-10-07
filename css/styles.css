@@ -3,7 +3,7 @@
     width:474px;
     height:474px;
     padding:8px;
-    margin:50px auto 10px auto;        
+    margin:5px auto 10px auto;        
   }
 
 .digit {
@@ -86,6 +86,36 @@
     padding:3px 10px;
     font-size:35px;
     border: 2px solid rgba(153, 53, 53, 0.473);
+  }
+
+  #header{
+    background:#dddddd;
+    width:474px;
+    height:20px;
+    padding:8px;
+    margin:10px auto 2px auto; 
+  }
+
+  .top-board {
+    /* background-color: #79b48d; */
+    width:156px;
+    height:20px;
+    float:left;
+    margin:0px;
+    padding:0px;  
+    font-family: 'Courier New', Courier, monospace;  
+    /* border: 1px solid black; */
+  }
+
+  #chronometer {
+    /* background-color: #79b48d; */
+    width:156px;
+    height:20px;
+    float:left;
+    margin:0px;
+    padding:0px;  
+    font-family: 'Courier New', Courier, monospace;  
+    /* border: 1px solid black; */
   }
 
   @media (max-width: 600px) {

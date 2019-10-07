@@ -5,11 +5,30 @@
         <meta name="Sudoku game" content="Html Sudoku grid">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Sudoku</title>
-        <link rel="stylesheet" href="css/styles.css">        
+        <link rel="stylesheet" href="css/styles.css">
+        <link href="css/reset.css" type="text/css" rel="stylesheet">
+        <!-- <link href="css/bootstrap.min.css" type="text/css" rel="stylesheet">
+        <link href="css/main.css" type="text/css" rel="stylesheet">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+
+        
     </head>
 
     <body>
-        
+        <div id = "header">
+            <div class = "top-board">
+                errors <label id = "num-error">0/3</label>
+            </div>
+
+            <div class = "top-board">
+                    points <label id = "num-error">1000</label>
+                </div>
+
+            <div class = "top-board">
+                time <label id = "time">00:00</label>
+            </div>
+        </div>
+
         <div id="main_grid">
         </div>
 
@@ -23,8 +42,10 @@
             <div class="key-num" value = "7">7</div>
             <div class="key-num" value = "8">8</div>
             <div class="key-num" value = "9">9</div>
-        </div>
+        </div>        
 
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
         <script src="javascript/script.js"></script>
     </body>
 </html>
