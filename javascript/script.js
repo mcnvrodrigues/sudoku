@@ -294,7 +294,7 @@ function digitClicked(e){
 
 function keyClicked(e){
     //debugger;    
-    match.setKeySelected(e.currentTarget);
+    match.setKeySelected(e.currentTarget);    
 
     if(match.getDigitSelected()){
         
@@ -435,28 +435,71 @@ function linkKeyDigit(){
 }
 
 function time() {
-    
-    let s = 1;
+    // 15 min = 900s
+    //let total_time = 884;
+    let total_time = 884;
+    let s = 59;
     let s_r = '';
-    let m = 0;
+    let m = 14;
     let m_r = '';
     
     
-	const interval = setInterval(function() {
-		if (s == 60) { m++; s = 0; }
-		if (m == 60) { s = 0; m = 0; }
+	let interval = setInterval(function() {
+		if (s == 0) { m-=1; s = 60; }
+        //if (m == 60) { s = 0; m = 0; }
+        if (s == 60) { s = 59; s_r = '' + 00; }
+        if(total_time == 0){clearInterval(interval);}        
 		
         if(m < 10) m_r = "0" + m; else m_r = '' + m;	
         if(s < 10) s_r = "0" + s; else s_r = '' + s;
         document.getElementById("time").innerText = `${m_r}:${s_r}`;
+        total_time -= 1;
+        s-=1;
+
+        if(total_time == 0){
+            timeIsUp();
+        }
         
-		s++;
-	},1000);
+    },1000);
+    
+    
+    
 }
 
 
 function winGame(){
     let grid = document.querySelectorAll('.bl');
+}
+
+function timeIsUp(){
+    let windowTimesUp = document.createElement('div');
+    windowTimesUp.setAttribute('class','window-times-up');
+    
+    let mainGrid = document.getElementById("main_grid");    
+    mainGrid.appendChild(windowTimesUp);
+
+    let windowTimesla = document.createElement('div');
+    windowTimesla.setAttribute('class', 'window-times-la');
+
+    windowTimesla.innerHTML = "Time is up!";
+
+    windowTimesUp.appendChild(windowTimesla);
+
+    let pt = document.getElementById('points');
+    pt.innerHTML = 0;
+
+    let windowTimeslb = document.createElement('div');
+    windowTimeslb.setAttribute('class', 'window-times-la');
+    windowTimesUp.appendChild(windowTimeslb);
+
+    let errors = document.getElementById("num-error");
+
+    windowTimeslb.innerHTML = `Errors ${errors.innerHTML}
+                                points 0`;
+
+    document.querySelectorAll('.key-num').forEach(num => {
+        num.onclick = 0;
+    });      
 }
 
 
