@@ -137,6 +137,7 @@
 
   .window-times-la {
     /* background-color: #79b48d; */
+    
     width:452px;
     height:156px;
     text-justify: distribute;
@@ -149,6 +150,96 @@
     font-size: 48px;
     /* border: 1px solid black; */
   }
+
+  .window-init-game{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+    position:absolute;
+    /* background-image: url("/images/images.jpeg"); */
+    /* background-size: 400px 495px;  */
+    
+    /* background-repeat: no-repeat; */
+    background-color: #9b5627c9;
+    width:495px;
+    height:610px;
+    padding:0px;    
+    margin:-10px;       
+  }
+
+  
+
+  .btn-init {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 200px;
+    font-size: 16px;
+    margin: 35px 160px;
+    cursor: pointer;
+  }
+
+  .img-init{    
+    background-image: url("/images/sudoku.png");     
+    background-repeat: no-repeat;
+    /* background-color: #cacacaf5; */
+    background-size: 300px 280px;
+    width:300px;
+    height:280px;
+    padding:0px;   
+    /* border: 1px solid gray;     */
+    
+  }
+
+  .img-win{    
+    background-image: url("/images/win.png");     
+    background-repeat: no-repeat;
+    /* background-color: #cacacaf5; */
+    background-size: 300px 280px;
+    width:300px;
+    height:280px;
+    padding:0px;   
+    /* border: 1px solid gray;     */
+    
+  }
+
+  .hidden-section {
+    display: none;
+ 
+  }
+
+  .button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+
+  .button3 {
+    background-color: white; 
+    color: black; 
+    border: 2px solid #f44336;
+  }
+
+  .button3:hover {
+    background-color: #f44336;
+    color: white;
+  }
+  
 
   @media (max-width: 600px) {
     #main_grid {

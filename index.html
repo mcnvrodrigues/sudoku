@@ -13,9 +13,34 @@
 
         
     </head>
+    
 
     <body>
         <div id = "header">
+            <div id = 'window-init' class = 'window-init-game'>
+                <div class = 'img-init'>
+                </div>
+
+                <button id = "btn-init" class="button button3">Start game</button>
+
+            </div>
+
+            <div id = 'window-win' class = 'window-init-game hidden-section'>
+                <div class = 'img-win'>                    
+                </div>
+
+                <button id = "btn-new-game" class='button button3' a href = "index.html">Restart game</button>
+
+            </div>
+
+            <div id = 'window-error' class = 'window-init-game hidden-section'>
+                    <div class = 'img-error'>                    
+                    </div>
+    
+                    <button id = "btn-new-game" class='button button3' a href = "index.html">Restart game</button>
+    
+                </div>
+
             <div class = "top-board">
                 errors <label id = "num-error">0/3</label>
             </div>
@@ -30,6 +55,7 @@
         </div>
 
         <div id="main_grid">
+            
         </div>
 
         <div class="keyboard">

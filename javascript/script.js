@@ -1,9 +1,12 @@
+let interval = 0;
+
 class Game{
     constructor(){
         this.keySelected = 0;
         this.digitSelected = 0;
         this.previousTarget = '';   
-        this.numErrors = 0;     
+        this.numErrors = 0; 
+        this.maxError = 3;    
     }
 
     setKeySelected(key){
@@ -414,16 +417,22 @@ function linkKeyDigit(){
             if(userNumber !== key){
                 
                 if(!checkIfNumberIsValid(key)){
+
                     match.setNumErrors();
+                    if(match.numErrors == match.maxError){
+                        
+                        window.location.href = './gameover.html';
+                    }
                 
                     let errorLabel = document.getElementById("num-error");
-                    errorLabel.innerText = `${match.getNumErrors()}/3`;
+                    errorLabel.innerText = `${match.getNumErrors()}/${match.maxError}`;
                 }
                 userSolution.getBlockByIndex(block).set(row, column, key);// atribui valor selecionado pelo usuário no grid
                 markInvalidNumbers();
                 if(userSolution.getTotalNumbers() === 81){
                     if(match.checkFinalResult(solution, userSolution)){
                         console.log('You win!');
+                        winGame();
                     }
                 }
                 console.log(userSolution.getTotalNumbers());
@@ -437,17 +446,17 @@ function linkKeyDigit(){
 function time() {
     // 15 min = 900s
     //let total_time = 884;
-    let total_time = 884;
+    let total_time = 898;
     let s = 59;
     let s_r = '';
     let m = 14;
     let m_r = '';
     
     
-	let interval = setInterval(function() {
-		if (s == 0) { m-=1; s = 60; }
+	interval = setInterval(function() {
+		if (s == 0) { m-=1; s = 60; s_r = '' + 00;}
         //if (m == 60) { s = 0; m = 0; }
-        if (s == 60) { s = 59; s_r = '' + 00; }
+        
         if(total_time == 0){clearInterval(interval);}        
 		
         if(m < 10) m_r = "0" + m; else m_r = '' + m;	
@@ -460,15 +469,22 @@ function time() {
             timeIsUp();
         }
         
-    },1000);
-    
-    
+    },1000);   
     
 }
 
 
 function winGame(){
-    let grid = document.querySelectorAll('.bl');
+    // let grid = document.querySelectorAll('.bl');
+
+    let winWindow = document.getElementById('window-win');
+    winWindow.classList.remove("hidden-section");
+    clearInterval(interval);
+
+    let btnNewGame = document.getElementById('btn-new-game');
+    btnNewGame.onclick = function(){
+        location.reload();
+    }
 }
 
 function timeIsUp(){
@@ -500,6 +516,54 @@ function timeIsUp(){
     document.querySelectorAll('.key-num').forEach(num => {
         num.onclick = 0;
     });      
+}
+
+function initGame(){
+
+    let btnInit = document.getElementById('btn-init');
+
+    btnInit.onclick = function(){
+        let windowInit = document.getElementById('window-init');
+        windowInit.classList.add("hidden-section");
+        time();
+    }
+    // let windowInitGame = document.createElement('div');
+    // windowInitGame.setAttribute('class','window-init-game');
+    
+    // let header = document.getElementById("header");    
+    // header.appendChild(windowInitGame);
+
+
+    // // let btnInit = document.createElement('button');
+    // // btnInit.setAttribute('class', 'btn-init');
+    // // windowInitGame.appendChild(btnInit);
+
+    // let imgInit = document.createElement('div');
+    // imgInit.setAttribute('class', 'img-init');
+    // windowInitGame.appendChild(imgInit);
+
+    // let windowTimesla = document.createElement('div');
+    // windowTimesla.setAttribute('class', 'window-times-la');
+
+    // windowTimesla.innerHTML = "Time is up!";
+
+    // windowTimesUp.appendChild(windowTimesla);
+
+    // let pt = document.getElementById('points');
+    // pt.innerHTML = 0;
+
+    // let windowTimeslb = document.createElement('div');
+    // windowTimeslb.setAttribute('class', 'window-times-la');
+    // windowTimesUp.appendChild(windowTimeslb);
+
+    // let errors = document.getElementById("num-error");
+
+    // windowTimeslb.innerHTML = `Errors ${errors.innerHTML}
+    //                             points 0`;
+
+    // document.querySelectorAll('.key-num').forEach(num => {
+    //     num.onclick = 0;
+    // });      
 }
 
 
@@ -548,7 +612,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     num.onclick = keyClicked;
   });  
 
-  time();
+  initGame();
+
+  
     
   });
   
