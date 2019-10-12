@@ -421,7 +421,8 @@ function linkKeyDigit(){
                     match.setNumErrors();
                     if(match.numErrors == match.maxError){
                         
-                        window.location.href = './gameover.html';
+                        outOfErrors();
+                        // window.location.href = './gameover.html';
                     }
                 
                     let errorLabel = document.getElementById("num-error");
@@ -455,9 +456,7 @@ function time() {
     
 	interval = setInterval(function() {
 		if (s == 0) { m-=1; s = 60; s_r = '' + 00;}
-        //if (m == 60) { s = 0; m = 0; }
-        
-        if(total_time == 0){clearInterval(interval);}        
+        //if (m == 60) { s = 0; m = 0; }            
 		
         if(m < 10) m_r = "0" + m; else m_r = '' + m;	
         if(s < 10) s_r = "0" + s; else s_r = '' + s;
@@ -467,6 +466,7 @@ function time() {
 
         if(total_time == 0){
             timeIsUp();
+            clearInterval(interval);
         }
         
     },1000);   
@@ -487,35 +487,48 @@ function winGame(){
     }
 }
 
-function timeIsUp(){
-    let windowTimesUp = document.createElement('div');
-    windowTimesUp.setAttribute('class','window-times-up');
+function timeIsUp(){    
+
+    let timeWindow = document.getElementById("window-time-up");
+    timeWindow.classList.remove("hidden-section");
+   
+
+    let btnInit = document.getElementById('btn-new-game-time');
+
+    btnInit.onclick = function(){
+        // let errorWin = document.getElementById('window-error');
+        // errorWin.classList.add("hidden-section");
+        // time();
+        location.reload();
+    }
+    // let windowTimesUp = document.createElement('div');
+    // windowTimesUp.setAttribute('class','window-times-up');
     
-    let mainGrid = document.getElementById("main_grid");    
-    mainGrid.appendChild(windowTimesUp);
+    // let mainGrid = document.getElementById("main_grid");    
+    // mainGrid.appendChild(windowTimesUp);
 
-    let windowTimesla = document.createElement('div');
-    windowTimesla.setAttribute('class', 'window-times-la');
+    // let windowTimesla = document.createElement('div');
+    // windowTimesla.setAttribute('class', 'window-times-la');
 
-    windowTimesla.innerHTML = "Time is up!";
+    // windowTimesla.innerHTML = "Time is up!";
 
-    windowTimesUp.appendChild(windowTimesla);
+    // windowTimesUp.appendChild(windowTimesla);
 
-    let pt = document.getElementById('points');
-    pt.innerHTML = 0;
+    // let pt = document.getElementById('points');
+    // pt.innerHTML = 0;
 
-    let windowTimeslb = document.createElement('div');
-    windowTimeslb.setAttribute('class', 'window-times-la');
-    windowTimesUp.appendChild(windowTimeslb);
+    // let windowTimeslb = document.createElement('div');
+    // windowTimeslb.setAttribute('class', 'window-times-la');
+    // windowTimesUp.appendChild(windowTimeslb);
 
-    let errors = document.getElementById("num-error");
+    // let errors = document.getElementById("num-error");
 
-    windowTimeslb.innerHTML = `Errors ${errors.innerHTML}
-                                points 0`;
+    // windowTimeslb.innerHTML = `Errors ${errors.innerHTML}
+    //                             points 0`;
 
-    document.querySelectorAll('.key-num').forEach(num => {
-        num.onclick = 0;
-    });      
+    // document.querySelectorAll('.key-num').forEach(num => {
+    //     num.onclick = 0;
+    // });      
 }
 
 function initGame(){
@@ -566,6 +579,116 @@ function initGame(){
     // });      
 }
 
+function eraseDigit(){
+    if(match.getDigitSelected() !== 0){      
+            
+            let digit = match.getDigitSelected(); //recupera elemento selecionado          
+            console.log(digit.innerHTML);  
+
+            let block = parseInt(digit.getAttribute('data-block-index')); //recupera block selecionado pelo usuário
+            let row = digit.getAttribute('data-row'); // recupera linha selecionada pelo usuário
+            let column = digit.getAttribute('data-column'); // recupera coluna selecionada pelo usuário            
+
+            userSolution.getBlockByIndex(block).set(row, column, 0);// atribui valor selecionado pelo usuário no grid              
+
+            digit.innerHTML = '<div class="num"></div>';
+            markInvalidNumbers();
+    }
+    
+}
+
+function resetBoard(){
+
+    let elements = document.querySelectorAll('.digit');
+    //console.log(elements);
+
+    elements.forEach(function(element){
+        let blIndex = parseInt(element.getAttribute('data-block-index'));
+        let rIndex = element.getAttribute('data-row');
+        let cIndex = element.getAttribute('data-column');        
+
+        element.innerHTML = `<div class="num"></div>`;
+        userSolution.getBlockByIndex(blIndex).set(rIndex, cIndex, 0);        
+    });  
+    markInvalidNumbers();
+    
+}
+
+function newGame(){
+    
+    let html = '';
+    let digit, digit_usr = undefined;
+
+    for(let bl = 0; bl < 9; bl += 1){    
+
+        html += `<div class="block">`;
+
+        for(let row = 0; row < 3; row += 1){
+
+            for (let column = 0; column < 3; column += 1){
+
+                digit = solution.getBlockByIndex(bl).getDigits()[row][column];                            
+                
+                let showNum = Math.floor(Math.random() * 10);                
+
+                if (showNum < 4){        
+                    userSolution.getBlockByIndex(bl).set(row, column, digit);
+        
+                    html += `<div class="digit-non-clickable bl" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"><div class="num">${digit}</div></div>`;
+                }else{
+                    html += `<div class="digit bl" data-block-index = "${bl}" data-row = "${row}" data-column = "${column}"></div>`;
+                }
+                
+            }
+        }
+        html += `</div>`;
+    }
+  
+    //console.table(userSolution);
+    let mainGrid = document.querySelector('#main_grid');
+  
+    if(mainGrid){
+        mainGrid.innerHTML = html;
+    }
+
+    // Bind the click event of each element to a function
+  document.querySelectorAll('.digit').forEach( digit => {
+    digit.onclick = digitClicked;
+  });
+
+  document.querySelectorAll('.key-num').forEach(num => {
+    num.onclick = keyClicked;
+  });  
+
+  clearInterval(interval);
+  resetBoard();
+  match.numErrors = 0;
+  let errorLabel = document.getElementById("num-error");
+  errorLabel.innerText = `${match.getNumErrors()}/${match.maxError}`;
+  time();
+  
+}
+
+function outOfErrors(){    
+    let errorsDiv = document.getElementById("num-errors");
+
+    let errorWindow = document.getElementById("window-error");
+    errorWindow.classList.remove("hidden-section");
+
+    errorsDiv.innerHTML = `Errors - 3/3`;
+
+    let btnInit = document.getElementById('btn-error-new-game');
+    clearInterval(interval);
+
+    btnInit.onclick = function(){
+        // let errorWin = document.getElementById('window-error');
+        // errorWin.classList.add("hidden-section");
+        // time();
+        location.reload();
+    }
+
+}
+
 
 document.addEventListener("DOMContentLoaded", function(event) { 
     let html = '';
@@ -608,9 +731,29 @@ document.addEventListener("DOMContentLoaded", function(event) {
     digit.onclick = digitClicked;
   });
 
+//   document.querySelectorAll('.digit').forEach( digit => {
+//     digit
+//   });
+
   document.querySelectorAll('.key-num').forEach(num => {
     num.onclick = keyClicked;
   });  
+
+  document.querySelectorAll('.button-k').forEach(num => {
+    num.onclick = keyClicked;
+  });
+
+  document.getElementById("btn-undo").onclick = function(){
+    eraseDigit();
+  }
+
+  document.getElementById("btn-reset").onclick = function(){
+    resetBoard();
+  }
+
+  document.getElementById("btn-new").onclick = function(){
+    newGame();
+  }
 
   initGame();
 

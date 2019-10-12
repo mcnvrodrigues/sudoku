@@ -33,13 +33,24 @@
 
             </div>
 
+            <div id = 'window-time-up' class = 'window-init-game hidden-section'>
+                <div class = 'img-timeup'>                    
+                </div>
+
+                <button id = "btn-new-game-time" class='button button3' a href = "index.html">Restart game</button>
+
+            </div>
+
             <div id = 'window-error' class = 'window-init-game hidden-section'>
                     <div class = 'img-error'>                    
                     </div>
+
+                    <div id = 'num-errors'>
+
+                    </div>
     
-                    <button id = "btn-new-game" class='button button3' a href = "index.html">Restart game</button>
-    
-                </div>
+                    <button id = "btn-error-new-game" class='button button3' a href = "index.html">Restart game</button>    
+            </div>
 
             <div class = "top-board">
                 errors <label id = "num-error">0/3</label>
@@ -58,7 +69,13 @@
             
         </div>
 
-        <div class="keyboard">
+        <div class = "keyboard">
+            <button id = "btn-undo" class="button-s button3-s">Undo</button>
+            <button id = "btn-reset" class="button-s button3-s">clear</button>
+            <button id = "btn-new" class="button-s button3-s">New game</button>
+        </div>
+
+        <!-- <div class="keyboard">
             <div class="key-num" value = "1">1</div>
             <div class="key-num" value = "2">2</div>
             <div class="key-num" value = "3">3</div>
@@ -68,7 +85,19 @@
             <div class="key-num" value = "7">7</div>
             <div class="key-num" value = "8">8</div>
             <div class="key-num" value = "9">9</div>
-        </div>       
+        </div>        -->
+
+        <div class="keyboard">
+            <button class="button-k button3-k">1</button>
+            <button class="button-k button3-k">2</button>
+            <button class="button-k button3-k">3</button>
+            <button class="button-k button3-k">4</button>
+            <button class="button-k button3-k">5</button>
+            <button class="button-k button3-k">6</button>
+            <button class="button-k button3-k">7</button>
+            <button class="button-k button3-k">8</button>
+            <button class="button-k button3-k">9</button>
+        </div> 
         
         <div id="new-key">
 
