@@ -447,10 +447,10 @@ function linkKeyDigit(){
 function time() {
     // 15 min = 900s
     //let total_time = 884;
-    let total_time = 898;
+    let total_time = 1799;
     let s = 59;
     let s_r = '';
-    let m = 14;
+    let m = 29;
     let m_r = '';
     
     
